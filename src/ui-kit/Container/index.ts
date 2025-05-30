@@ -25,9 +25,10 @@ export const Horizontal = styled.div<ContainerProps>`
   padding: ${({ $padding }) => $padding || '0'};
   margin: ${({ $margin }) => $margin || '0'};
   width: ${({ $width }) => $width || 'auto'};
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
 
   @media (max-width: 768px) {
+    flex-wrap: wrap;
     width: ${({ $width }) => $width || '100%'};
   }
 `;
