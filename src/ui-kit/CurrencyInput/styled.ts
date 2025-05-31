@@ -29,17 +29,16 @@ export const Container = styled.div<ContainerProps>`
 `;
 
 export const Dropdown = styled.div`
-  margin-left: -1px;
   position: absolute;
   width: 100%;
   top: 50px;
-  left: 0;
+  left: -1px;
   background-color: ${Color.BACKGROUND};
   border: 1px solid #80a2b6;
+  border-top: none;
   border-radius: 0 0 5px 5px;
-  z-index: 2;
-  max-height: 200px;
-  overflow-y: auto;
+  z-index: 1000;
+  overflow: hidden;
 `;
 
 export const StyledInput = styled.input`
@@ -69,7 +68,6 @@ export const StyledSelect = styled.div`
   height: 50px;
   width: 150px;
   cursor: pointer;
-  
 `;
 
 export const Divider = styled.span`
@@ -80,6 +78,8 @@ export const Divider = styled.span`
 
 export const InputWrap = styled.div`
   position: relative;
+  display: flex;
+  align-items: center;
 `;
 
 export const ChevronContainer = styled.div`
@@ -110,8 +110,15 @@ export const Ticker = styled(Text)`
 
 export const SelectItem = styled(Horizontal)`
   cursor: pointer;
+  box-sizing: border-box;
+  height: 52px;
+  min-height: 52px;
+  max-height: 52px;
 
   &:hover {
     background-color: #eaf1f7;
   }
+
+  will-change: transform;
+  backface-visibility: hidden;
 `;

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useMemo, useCallback } from 'react';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import { useOutsideClick } from '@src/hooks/useOutsideClick';
 import {
@@ -25,44 +25,68 @@ export function CurrencyInput(props: CurrencyInputProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const parentRef = useRef<HTMLDivElement>(null);
+
   const filteredCurrencies = useMemo(() => {
     if (!searchQuery.trim()) {
       return currencyOptions;
     }
 
     const query = searchQuery.toLowerCase();
-
     return currencyOptions.filter(
       (currency) => currency.name.toLowerCase().includes(query) || currency.ticker.toLowerCase().includes(query),
     );
   }, [currencyOptions, searchQuery]);
+
   const count = filteredCurrencies.length;
+
   const virtualizer = useVirtualizer({
     count,
     getScrollElement: () => parentRef.current,
-    estimateSize: () => 52,
-    enabled: isOpen,
-    measureElement: undefined,
+    estimateSize: useCallback(() => 50, []),
     overscan: 5,
+    measureElement: undefined,
+    getItemKey: useCallback(
+      (index: number) => {
+        const item = filteredCurrencies[index];
+        return item ? item.name : index;
+      },
+      [filteredCurrencies],
+    ),
   });
 
   const items = virtualizer.getVirtualItems();
 
-  const handleClickOutside = () => {
-    setIsOpen(false);
-  };
-
-  const handleOpenDropdown = () => {
-    setIsOpen(true);
-    setSearchQuery('');
-  };
-
-  const handleCloseDropdown = () => {
+  const handleClickOutside = useCallback(() => {
     setIsOpen(false);
     setSearchQuery('');
-  };
+  }, []);
 
   const containerRef = useOutsideClick(handleClickOutside);
+
+  const handleOpenDropdown = useCallback(() => {
+    setIsOpen(true);
+    setSearchQuery('');
+  }, []);
+
+  const handleCloseDropdown = useCallback(() => {
+    setIsOpen(false);
+    setSearchQuery('');
+  }, []);
+
+  const handleCurrencySelect = useCallback(
+    (currencyOption: any) => {
+      onCurrencyChange(currencyOption);
+      setIsOpen(false);
+      setSearchQuery('');
+    },
+    [onCurrencyChange],
+  );
+
+  useEffect(() => {
+    if (parentRef.current) {
+      parentRef.current.scrollTop = 0;
+    }
+  }, [searchQuery]);
 
   useEffect(() => {
     setInputValue(value);
@@ -84,30 +108,64 @@ export function CurrencyInput(props: CurrencyInputProps) {
               <CloseIcon />
             </CloseContainer>
           </InputWrap>
-          <Dropdown ref={parentRef}>
-            {items.map((virtualRow) => {
-              const currencyOption = filteredCurrencies[virtualRow.index];
-
-              return (
-                <SelectItem
-                  onClick={() => {
-                    onCurrencyChange(currencyOption);
-                    setIsOpen(false);
+          <Dropdown>
+            <div
+              ref={parentRef}
+              style={{
+                height: '200px',
+                overflow: 'auto',
+                scrollBehavior: 'auto',
+                WebkitOverflowScrolling: 'touch',
+              }}
+            >
+              {count > 0 ? (
+                <div
+                  style={{
+                    height: `${virtualizer.getTotalSize()}px`,
+                    width: '100%',
+                    position: 'relative',
                   }}
-                  key={virtualRow.key}
-                  data-index={virtualRow.index}
-                  ref={virtualizer.measureElement}
-                  $padding='16px'
-                  $align='center'
-                  $justify='start'
-                  $gap='12px'
                 >
-                  <img src={currencyOption.image} alt={currencyOption.name} />
-                  <Ticker>{currencyOption.ticker}</Ticker>
-                  <CurrencyName>{currencyOption.name}</CurrencyName>
+                  {items.map((virtualRow) => {
+                    const currencyOption = filteredCurrencies[virtualRow.index];
+
+                    if (!currencyOption) return null;
+
+                    return (
+                      <SelectItem
+                        onClick={() => handleCurrencySelect(currencyOption)}
+                        key={virtualRow.key}
+                        data-index={virtualRow.index}
+                        style={{
+                          position: 'absolute',
+                          top: 0,
+                          left: 0,
+                          width: '100%',
+                          height: '52px',
+                          transform: `translateY(${virtualRow.start}px)`,
+                        }}
+                        $padding='16px'
+                        $align='center'
+                        $justify='start'
+                        $gap='12px'
+                      >
+                        <img
+                          src={currencyOption.image}
+                          alt={currencyOption.name}
+                          style={{ width: '24px', height: '24px', flexShrink: 0 }}
+                        />
+                        <Ticker>{currencyOption.ticker}</Ticker>
+                        <CurrencyName>{currencyOption.name}</CurrencyName>
+                      </SelectItem>
+                    );
+                  })}
+                </div>
+              ) : (
+                <SelectItem $padding='16px' $align='center' $justify='center' $gap='12px' style={{ height: '52px' }}>
+                  <CurrencyName>No currencies found</CurrencyName>
                 </SelectItem>
-              );
-            })}
+              )}
+            </div>
           </Dropdown>
         </>
       )}
