@@ -1,6 +1,11 @@
 import React, { useEffect, useRef, useState, useMemo, useCallback } from 'react';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import { useOutsideClick } from '@src/hooks/useOutsideClick';
+import { CurrencyOption } from '@src/types/currency';
+import { Horizontal } from '../Container';
+import { CloseIcon } from '../Icons/CloseIcon';
+import { CurrencyInputProps } from './types';
+import { ChevronDownIcon } from '../Icons/ChevronDownIcon';
 import {
   ChevronContainer,
   CloseContainer,
@@ -14,10 +19,6 @@ import {
   Ticker,
   SelectItem,
 } from './styled';
-import { Horizontal } from '../Container';
-import { CloseIcon } from '../Icons/CloseIcon';
-import { CurrencyInputProps } from './types';
-import { ChevronDownIcon } from '../Icons/ChevronDownIcon';
 
 export function CurrencyInput(props: CurrencyInputProps) {
   const { value, currencyOptions, selectedCurrency, onCurrencyChange, onValueChange, isReadOnly } = props;
@@ -74,7 +75,7 @@ export function CurrencyInput(props: CurrencyInputProps) {
   }, []);
 
   const handleCurrencySelect = useCallback(
-    (currencyOption: any) => {
+    (currencyOption: CurrencyOption) => {
       onCurrencyChange(currencyOption);
       setIsOpen(false);
       setSearchQuery('');
