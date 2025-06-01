@@ -6,17 +6,7 @@ import { SwapIcon } from '@src/ui-kit/Icons/SwapIcon';
 import { ErrorMessage, SwapIconContainer } from './styled';
 
 export function ExchangeWidget() {
-  const {
-    currenciesOptions,
-    exchangeState,
-    loading,
-    error,
-    setCurrency,
-    setFromValue,
-    onChangeAddress,
-    onSubmit,
-    onSwap,
-  } = useExchange();
+  const { currenciesOptions, exchangeState, loading, error, setCurrency, setFromValue, onChangeAddress, onSubmit, onSwap } = useExchange();
 
   if (loading) {
     return <Loader />;
