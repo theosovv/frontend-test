@@ -162,7 +162,7 @@ export function CurrencyInput(props: CurrencyInputProps) {
                   })}
                 </div>
               ) : (
-                <SelectItem $padding='16px' $align='center' $justify='center' $gap='12px' style={{ height: '52px' }}>
+                <SelectItem $padding='16px' $align='center' $justify='center' $gap='12px'>
                   <CurrencyName>No currencies found</CurrencyName>
                 </SelectItem>
               )}

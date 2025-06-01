@@ -13,7 +13,12 @@ export class ExchangeService {
     }
   }
 
-  async getMinAmount(fromCurrency: string, toCurrency: string, fromNetwork: string, toNetwork: string): Promise<number> {
+  async getMinAmount(
+    fromCurrency: string,
+    toCurrency: string,
+    fromNetwork: string,
+    toNetwork: string,
+  ): Promise<number> {
     try {
       const { minAmount } = await this.apiClient.get<MinAmountResponse>(
         `/exchange/min-amount?fromCurrency=${fromCurrency}&toCurrency=${toCurrency}&fromNetwork=${fromNetwork}&toNetwork=${toNetwork}`,
@@ -24,7 +29,13 @@ export class ExchangeService {
     }
   }
 
-  async getEstimatedAmount(fromCurrency: string, toCurrency: string, fromNetwork: string, toNetwork: string, fromAmount: number): Promise<number> {
+  async getEstimatedAmount(
+    fromCurrency: string,
+    toCurrency: string,
+    fromNetwork: string,
+    toNetwork: string,
+    fromAmount: number,
+  ): Promise<number> {
     try {
       const { toAmount } = await this.apiClient.get<EstimatedAmountResponse>(
         // eslint-disable-next-line max-len

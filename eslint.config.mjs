@@ -60,7 +60,6 @@ export default [
       'react/react-in-jsx-scope': 'off', // Not needed in React 17+
       'react/jsx-no-undef': 'error',
       'react/jsx-indent': ['error', 2],
-      'react/jsx-max-props-per-line': ['warn', { maximum: 3 }],
 
       // React Hooks
       'react-hooks/rules-of-hooks': 'error',

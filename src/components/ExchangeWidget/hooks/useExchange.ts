@@ -65,7 +65,13 @@ export function useExchange() {
             return;
           }
 
-          const toAmount = await exchangeService.getEstimatedAmount(fromCurrency, toCurrency, fromNetwork, toNetwork, minAmount);
+          const toAmount = await exchangeService.getEstimatedAmount(
+            fromCurrency,
+            toCurrency,
+            fromNetwork,
+            toNetwork,
+            minAmount,
+          );
 
           if (toAmount === null) {
             setError('This pair is disabled now.');
@@ -109,14 +115,25 @@ export function useExchange() {
           return;
         }
 
-        const minAmount = await exchangeService.getMinAmount(fromCurrency.ticker, toCurrency.ticker, fromNetwork, toNetwork);
+        const minAmount = await exchangeService.getMinAmount(
+          fromCurrency.ticker,
+          toCurrency.ticker,
+          fromNetwork,
+          toNetwork,
+        );
 
         if (minAmount === null) {
           setError('This pair is disabled now.');
           return;
         }
 
-        const toAmount = await exchangeService.getEstimatedAmount(fromCurrency.ticker, toCurrency.ticker, fromNetwork, toNetwork, minAmount);
+        const toAmount = await exchangeService.getEstimatedAmount(
+          fromCurrency.ticker,
+          toCurrency.ticker,
+          fromNetwork,
+          toNetwork,
+          minAmount,
+        );
 
         if (toAmount === null) {
           setError('This pair is disabled now.');
@@ -217,7 +234,13 @@ export function useExchange() {
           return;
         }
 
-        const toAmount = await exchangeService.getEstimatedAmount(fromCurrency, toCurrency, fromNetwork, toNetwork, numValue);
+        const toAmount = await exchangeService.getEstimatedAmount(
+          fromCurrency,
+          toCurrency,
+          fromNetwork,
+          toNetwork,
+          numValue,
+        );
 
         if (toAmount === null) {
           setError('This pair is disabled now.');
@@ -304,7 +327,12 @@ export function useExchange() {
         return;
       }
 
-      const minAmount = await exchangeService.getMinAmount(newFromCurrency.ticker, newToCurrency.ticker, newFromCurrency.network, newToCurrency.network);
+      const minAmount = await exchangeService.getMinAmount(
+        newFromCurrency.ticker,
+        newToCurrency.ticker,
+        newFromCurrency.network,
+        newToCurrency.network,
+      );
 
       if (minAmount === null) {
         setError('This pair is disabled now.');
